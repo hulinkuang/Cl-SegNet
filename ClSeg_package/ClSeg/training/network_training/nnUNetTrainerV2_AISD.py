@@ -280,10 +280,10 @@ class nnUNetTrainerV2_AISD(nnUNetTrainer):
         Create a split and save it as splits_final.pkl file in the preprocessed data directory.
         """
         # if the split file does not exist we need to create it
-        if not isfile(join(self.dataset_directory, "splits_final.pkl")):
-            shutil.copy('../../../data/splits_final.pkl', self.dataset_directory)
+        if not isfile(join(self.dataset_directory, "splits_aisd.pkl")):
+            shutil.copy('../../../data/splits_aisd.pkl', self.dataset_directory)
 
-        splits_file = join(self.dataset_directory, "splits_final.pkl")
+        splits_file = join(self.dataset_directory, "splits_aisd.pkl")
         splits = load_pickle(splits_file)
 
         tr_keys = splits[0]['train']
