@@ -17,6 +17,7 @@ from copy import deepcopy
 from nnunet.utilities.nd_softmax import softmax_helper
 from torch import nn
 import torch
+import torch.nn.functional as F
 import numpy as np
 from nnunet.network_architecture.initialization import InitWeights_He
 from ClSeg.network_architecture.neural_network import SegmentationNetwork
@@ -24,6 +25,24 @@ from ClSeg.network_architecture.aff import Circle
 from ClSeg.network_architecture.hybridformer import Coformer3D
 import torch.nn.functional
 from einops import rearrange
+
+
+class SE_Module(nn.Module):
+    def __init__(self, channel, ratio=4):
+        super(SE_Module, self).__init__()
+        self.squeeze = nn.AdaptiveAvgPool3d(1)
+        self.excitation = nn.Sequential(
+            nn.Linear(in_features=channel, out_features=channel // ratio),
+            nn.GELU(),
+            nn.Linear(in_features=channel // ratio, out_features=channel),
+            nn.Sigmoid()
+        )
+
+    def forward(self, x):
+        b, c, _, _, _ = x.size()
+        y = self.squeeze(x).view(b, c)
+        z = self.excitation(y).view(b, c, 1, 1, 1)
+        return z.expand_as(x)
 
 
 class ConvDropoutNormNonlin(nn.Module):
@@ -275,6 +294,8 @@ class Generic_UNet(SegmentationNetwork):
         self.tu = []
         self.seg_outputs = []
         self.fuse = []
+        self.mfa1 = nn.Conv3d(1024, 320, 1)  # Last 3 levels
+        self.mfa2 = nn.Conv3d(576, 320, 1)  #
 
         output_features = base_num_features
         input_features = input_channels
@@ -321,6 +342,7 @@ class Generic_UNet(SegmentationNetwork):
         self.conv_kwargs['kernel_size'] = self.conv_kernel_sizes[num_pool]
         self.conv_kwargs['padding'] = self.conv_pad_sizes[num_pool]
         self.fuse.append(Circle(output_features, r=4))
+        self.se = SE_Module(output_features, ratio=4)
         self.conv_blocks_context.append(nn.Sequential(
             StackedConvLayers(input_features, output_features, num_conv_per_stage - 1, self.conv_op, self.conv_kwargs,
                               self.norm_op, self.norm_op_kwargs, self.dropout_op, self.dropout_op_kwargs, self.nonlin,
@@ -407,8 +429,19 @@ class Generic_UNet(SegmentationNetwork):
             if not self.convolutional_pooling:
                 x = self.td[d](x)
         x = self.conv_blocks_context[-1](x)
-        feat_trans = nn.functional.interpolate(x_trnas[-1], scale_factor=(0.5, 0.5, 0.5), mode='trilinear')
-        x = self.fuse[-1](x, feat_trans)
+        feat_trans = [F.interpolate(i, size=(8, 10, 10), mode='trilinear') for i in x_trnas[-2:-1]]
+        feat_trans = self.mfa2(torch.cat(feat_trans + [x_trnas[-1]], dim=1))
+        feat_conv = [F.interpolate(i, size=(4, 5, 5), mode='trilinear') for i in skips[-3:]]
+        feat_conv = self.mfa1(torch.cat(feat_conv + [x], dim=1))
+        feat_trans = nn.functional.interpolate(feat_trans, scale_factor=(0.5, 0.5, 0.5), mode='trilinear')
+
+        x = self.fuse[-1](feat_conv, feat_trans)
+
+        res = x
+        x_flip = torch.flip(x, dims=[4])
+        x = x * self.se(x - x_flip)
+        x = res + x
+
         for u in range(len(self.tu)):
             x = self.tu[u](x)
             x = torch.cat((x, skips[-(u + 1)]), dim=1)

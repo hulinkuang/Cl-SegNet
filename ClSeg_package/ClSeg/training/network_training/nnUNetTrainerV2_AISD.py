@@ -149,7 +149,7 @@ class nnUNetTrainerV2_AISD(nnUNetTrainer):
         dropout_op_kwargs = {'p': 0, 'inplace': True}
         net_nonlin = nn.LeakyReLU
         net_nonlin_kwargs = {'negative_slope': 1e-2, 'inplace': True}
-        self.network = Generic_UNet(self.num_input_channels, self.base_num_features, self.num_classes,
+        self.network = Generic_UNet(self.num_input_channels, 16, self.num_classes,
                                     len(self.net_num_pool_op_kernel_sizes),
                                     self.conv_per_stage, 2, conv_op, norm_op, norm_op_kwargs, dropout_op,
                                     dropout_op_kwargs,
@@ -280,10 +280,10 @@ class nnUNetTrainerV2_AISD(nnUNetTrainer):
         Create a split and save it as splits_final.pkl file in the preprocessed data directory.
         """
         # if the split file does not exist we need to create it
-        if not isfile(join(self.dataset_directory, "splits_aisd.pkl")):
-            shutil.copy('../../../data/splits_aisd.pkl', self.dataset_directory)
+        if not isfile(join(self.dataset_directory, "splits_final.pkl")):
+            shutil.copy('../../../data/splits_final.pkl', self.dataset_directory)
 
-        splits_file = join(self.dataset_directory, "splits_aisd.pkl")
+        splits_file = join(self.dataset_directory, "splits_final.pkl")
         splits = load_pickle(splits_file)
 
         tr_keys = splits[0]['train']

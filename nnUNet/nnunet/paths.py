@@ -25,12 +25,9 @@ default_cascade_trainer = "nnUNetTrainerV2CascadeFullRes"
 """
 PLEASE READ paths.md FOR INFORMATION TO HOW TO SET THIS UP
 """
-# os.environ['nnUNet_raw_data_base'] = "/home/wyh/Codes/CoTr_KSR/nnUNet/nnU_data/nnUNet_raw_data_base"
-# os.environ['nnUNet_preprocessed'] = "/home/wyh/Codes/CoTr_KSR/nnUNet/nnU_data/nnUNet_raw_data_base/processed_data"
-# os.environ['RESULTS_FOLDER'] = "/home/wyh/Codes/CoTr_KSR/nnUNet/result"
-os.environ['nnUNet_raw_data_base'] = "/homec/kuanghl/Codes/CoTr_KSR/nnUNet/nnU_data/nnUNet_raw_data_base"
-os.environ['nnUNet_preprocessed'] = "/homec/kuanghl/Codes/CoTr_KSR/nnUNet/nnU_data/nnUNet_raw_data_base/processed_data"
-os.environ['RESULTS_FOLDER'] = "/homec/kuanghl/Codes/AAAI-Code/nnUNet/result"
+os.environ['nnUNet_raw_data_base'] = "/home/wyh/Codes/Coformer/nnUNet/nnU_data/nnUNet_raw_data_base"
+os.environ['nnUNet_preprocessed'] = "/home/wyh/Codes/Coformer/nnUNet/nnU_data/nnUNet_raw_data_base/processed_data"
+os.environ['RESULTS_FOLDER'] = "/home/wyh/Codes/ClSeg/nnUNet/result"
 
 base = os.environ['nnUNet_raw_data_base'] if "nnUNet_raw_data_base" in os.environ.keys() else None
 preprocessing_output_dir = os.environ['nnUNet_preprocessed'] if "nnUNet_preprocessed" in os.environ.keys() else None

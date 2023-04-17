@@ -15,12 +15,12 @@ import ClSeg
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-gpu", type=str, default='0')
+    parser.add_argument("-gpu", type=str, default='3')
 
     parser.add_argument("-network", type=str, default='3d_fullres')
     parser.add_argument("-network_trainer", type=str, default='nnUNetTrainerV2_AISD',
                         help='nnUNetTrainerV2_AISD for AISD dataset, nnUNetTrainerV2_ISLES for ISLES 2018 dataset')
-    parser.add_argument("-task", type=str, default='401', help="can be task name or task id")
+    parser.add_argument("-task", type=str, default='402', help="can be task name or task id")
     parser.add_argument("-fold", type=str, default='all', help='0, 1, ..., 5 or \'all\'')
     parser.add_argument("-outpath", type=str, default='ClSeg', help='output path')
     parser.add_argument("-norm_cfg", type=str, default='IN', help='BN, IN or GN')
