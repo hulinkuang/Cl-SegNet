@@ -15,7 +15,7 @@ import ClSeg
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-gpu", type=str, default='3')
+    parser.add_argument("-gpu", type=str, default='0')
 
     parser.add_argument("-network", type=str, default='3d_fullres')
     parser.add_argument("-network_trainer", type=str, default='nnUNetTrainerV2_AISD',

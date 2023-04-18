@@ -1,5 +1,5 @@
 # Cl-SegNet
-The code for the paper "CNN and Transformer Hybrid Network with Circular Feature Interaction for Acute Ischemic Stroke Lesion Segmentation on Non-contrast CT Scans" <br />
+The code for the paper "CNN and Transformer Hybrid Network with Circular Feature Interaction for Acute Ischemic Stroke Lesion Segmentation on Non-contrast CT Scans" submitted to IEEE TMI. <br />
 
 
 ## Requirements
