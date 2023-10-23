@@ -24,8 +24,12 @@ cd ClSeg_package
 pip install -e .
 ```
 ### 1 Acute Ischemic Stroke Dataset (AISD)
-### 1.1 Dataset access and pre-processing
+### 1.1 Dataset access
 AISD dataset can be downloaded from (https://github.com/griffinliang/aisd). Pre-process the datasets using the preprocess codes in nnUNet/nnunet/dataset_conversion.
+
+### 1.2 Pre-processing
+The documentation of the pre-processing can be found at [[DOC]](./nnUNet/documentation) <br />
+
 ### 1.2 Training
 cd ClSeg_package/ClSeg/run
 
