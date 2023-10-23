@@ -14,12 +14,22 @@
 
 from collections import OrderedDict
 from multiprocessing import Pool
-
+import shutil
 import SimpleITK as sitk
 from sklearn.model_selection import train_test_split
 from batchgenerators.utilities.file_and_folder_operations import *
 from nnunet.configuration import default_num_threads
 import numpy as np
+
+test_ids = ['0073410', '0072723', '0226290', '0537908', '0538058', '0091415', '0538780', '0073540', '0226188',
+            '0226258', '0226314', '0091507',
+            '0226298', '0538975', '0226257', '0226142', '0072681', '0091538', '0538983', '0537961', '0091646',
+            '0072765', '0226137', '0091621',
+            '0091458', '0021822', '0538319', '0226133', '0091657', '0537925', '0073489', '0538502', '0091476',
+            '0226136', '0538532', '0073312',
+            '0539025', '0226309', '0226307', '0091383', '0021092', '0537990', '0226299', '0073060', '0538505',
+            '0073424', '0091534', '0226125',
+            '0072691', '0538425', '0226199', '0226261']
 
 
 def get_subfiles(folder, join=True, prefix=None, suffix=None, sort=True):
@@ -56,9 +66,9 @@ def zscore_norm(image):
 
 
 if __name__ == "__main__":
-    train_dir = "/home/wyh/Codes/dataset/AIS"
+    train_dir = "/home/wyh/Datasets/AISD1/"
 
-    output_folder = "/home/wyh/Codes/CoTr_KSR/nnUNet/nnU_data/nnUNet_raw_data_base/nnUNet_raw_data/Task401_AIS"
+    output_folder = "/home/wyh/Codes/Coformer/nnUNet/nnU_data/nnUNet_raw_data_base/nnUNet_raw_data/Task402_AIS"
     img_dir = join(output_folder, "imagesTr")
     lab_dir = join(output_folder, "labelsTr")
     img_dir_te = join(output_folder, "imagesTs")
@@ -68,64 +78,26 @@ if __name__ == "__main__":
 
 
     def load_save_train(args):
-        data_file, seg_file, f_id = args
-        description = data_file.split('/')[-2]
-        pat_id = f_id[description]
-        pat_id = "AIS" + description + "_" + str(pat_id)
+        data_file, seg_file = args
+        assert data_file.split('/')[-2] == seg_file.split('/')[-2]
+        pat_id = data_file.split('/')[-2]
+        print(pat_id)
 
-        img_itk_ = sitk.ReadImage(data_file)
-        img_arr = sitk.GetArrayFromImage(img_itk_)
-        img_arr = zscore_norm(img_arr)
-        img_itk = sitk.GetImageFromArray(img_arr)
-        img_itk.SetSpacing(img_itk_.GetSpacing())
-        img_itk.SetOrigin(img_itk_.GetOrigin())
-        img_itk.SetDirection(img_itk_.GetDirection())
-        sitk.WriteImage(img_itk, join(img_dir, pat_id + "_0000.nii.gz"))
-
-        seg_itk = sitk.ReadImage(seg_file)
-        seg_arr = sitk.GetArrayFromImage(seg_itk)
-        seg_arr[seg_arr == 4] = 0
-        seg_arr[seg_arr > 0] = 1
-        itk = sitk.GetImageFromArray(seg_arr)
-        itk.SetSpacing(seg_itk.GetSpacing())
-        itk.SetOrigin(seg_itk.GetOrigin())
-        itk.SetDirection(seg_itk.GetDirection())
-        sitk.WriteImage(itk, join(lab_dir, pat_id + ".nii.gz"))
+        shutil.copy(data_file, join(img_dir, pat_id + "_0000.nii.gz"))
+        shutil.copy(seg_file, join(lab_dir, pat_id + ".nii.gz"))
         return pat_id
 
 
-    def load_save_test(args):
-        data_file, f_id = args
-        description = data_file.split('/')[-2]
-        pat_id = f_id[description]
-        pat_id = "KSR" + description + "_" + str(pat_id)
+    nii_files_data = sorted(get_subfiles(train_dir, True, "CT.nii.gz", "nii.gz", True))
+    nii_files_seg = sorted(get_subfiles(train_dir, True, "GT_hard", "nii.gz", True))
 
-        img_itk = sitk.ReadImage(data_file)
-        sitk.WriteImage(img_itk, join(img_dir_te, pat_id + "_0000.nii.gz"))
-        return pat_id
-
-    def get_pat_id(args):
-        data_file, f_id = args
-        description = data_file.split('/')[-2]
-        pat_id = f_id[description]
-        pat_id = "KSR" + description + "_" + str(pat_id)
-
-        return pat_id
-
-
-    nii_files_data = get_subfiles(train_dir, True, "CT", "nii.gz", True)
-    nii_files_seg = get_subfiles(train_dir, True, "GT", "nii.gz", True)
-    file_id = OrderedDict()
-    for k, v in zip(nii_files_data, range(1, len(nii_files_data) + 1)):
-        file_id[k.split('/')[-2]] = v
-
-    p = Pool(default_num_threads)
-    all_ids = p.map(load_save_train, zip(nii_files_data, nii_files_seg, [file_id] * len(nii_files_data)))
+    p = Pool(8)
+    all_ids = p.map(load_save_train, zip(nii_files_data, nii_files_seg))
     p.close()
     p.join()
 
     json_dict = OrderedDict()
-    json_dict['name'] = "KSR"
+    json_dict['name'] = "AISD"
     json_dict['description'] = ""
     json_dict['tensorImageSize'] = "4D"
     json_dict['reference'] = "see challenge website"
@@ -151,11 +123,12 @@ if __name__ == "__main__":
 
     # create a dummy split (patients need to be separated)
     splits = [OrderedDict()]
-    train, test = train_test_split(all_ids, test_size=0.203, shuffle=True, random_state=99)
-    train, val = train_test_split(train, test_size=0.125, shuffle=True, random_state=99)
-    splits[-1]['train'] = train
-    splits[-1]['val'] = val
-    splits[-1]['test'] = test
+    train = list(set(all_ids) - set(test_ids))
+    train_ids, val_ids = train_test_split(train, test_size=0.118, shuffle=True, random_state=99)
+    # train, val = train_test_split(train, test_size=0.125, shuffle=True, random_state=99)
+    splits[-1]['train'] = train_ids
+    splits[-1]['val'] = val_ids
+    splits[-1]['test'] = test_ids
     splits[-1]['all'] = all_ids
 
     save_pickle(splits, join(output_folder, "splits_final.pkl"))

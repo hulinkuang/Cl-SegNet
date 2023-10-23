@@ -1,5 +1,5 @@
 # Cl-SegNet
-The code for the paper "CNN and Transformer Hybrid Network with Circular Feature Interaction for Acute Ischemic Stroke Lesion Segmentation on Non-contrast CT Scans" <br />
+The code for the paper "Hybrid CNN-Transformer Network with Circular Feature Interaction for Acute Ischemic Stroke Lesion Segmentation on Non-contrast CT Scans" submitted to IEEE TMI. <br />
 
 
 ## Requirements
@@ -33,6 +33,9 @@ cd ClSeg_package/ClSeg/run
 
 ### 1.3 Testing 
 * Run `python run_training.py -network_trainer nnUNetTrainerV2_AISD -gpu='0' -task={task_id} -outpath='AISD' -val --val_folder='validation_output'` for testing.
+
+### 2.1 Pre-trained model
+The pre-trained model of AISD dataset can be downloaded from [[Baidu YUN]](https://pan.baidu.com/s/1RmswEZsQewr7UcC14UCKMA) with the password "4phx".
 
 ## Acknowledgements
 Part of codes are reused from the nnU-Net. Thanks to Fabian Isensee for the codes of nnU-Net.
