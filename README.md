@@ -30,16 +30,19 @@ AISD dataset can be downloaded from (https://github.com/griffinliang/aisd). Pre-
 ### 1.2 Pre-processing
 The documentation of the pre-processing can be found at [[DOC]](./nnUNet/documentation) <br />
 
-### 1.2 Training
+### 1.3 Training
 cd ClSeg_package/ClSeg/run
 
 * Run `python run_training.py -network_trainer nnUNetTrainerV2_AISD -gpu='0' -task={task_id} -outpath='AISD'` for training.
 
-### 1.3 Testing 
+### 1.4 Testing 
 * Run `python run_training.py -network_trainer nnUNetTrainerV2_AISD -gpu='0' -task={task_id} -outpath='AISD' -val --val_folder='validation_output'` for testing.
 
 ### 2.1 Pre-trained model
 The pre-trained model of AISD dataset can be downloaded from [[Baidu YUN]](https://pan.baidu.com/s/1RmswEZsQewr7UcC14UCKMA) with the password "4phx".
+
+### 2.2 Reproduction codes
+The codes for reproducing the results of the papers (LambdaUNet, UNet-AM, UNet-GC, i.e.) can be found at [[DOC]](./ClSeg_package/ClSeg/network_architecture) <br />
 
 ## Acknowledgements
 Part of codes are reused from the nnU-Net. Thanks to Fabian Isensee for the codes of nnU-Net.
