@@ -41,8 +41,22 @@ cd ClSeg_package/ClSeg/run
 ### 2.1 Pre-trained model
 The pre-trained model of AISD dataset can be downloaded from [[Baidu YUN]](https://pan.baidu.com/s/1RmswEZsQewr7UcC14UCKMA) with the password "4phx".
 
-### 2.2 Reproduction codes
-The codes for reproducing the results of the papers (LambdaUNet, UNet-AM, UNet-GC, i.e.) can be found at [[DOC]](./ClSeg_package/ClSeg/network_architecture) <br />
+### 2.2 Reproduction codes 
+For the methods (i.e. LambdaUNet [1], UNet-AM [2], UNet-GC [3]) that do not publish their codes, we reproduce these methods by ourselves, which can be found at [[DOC]](./ClSeg_package/ClSeg/network_architecture)
+
+### 2.3 Open-source codes
+The open-source codes can are as follows:
+[[AttnUnet2D]](https://github.com/sfczekalski/attention_unet) </br>
+[[Swin-Unet]](https://github.com/HuCaoFighting/Swin-Unet) </br>
+[[TransUNet]](https://github.com/Beckschen/TransUNet) </br>
+[[FAT-Net]](https://github.com/SZUcsh/FAT-Net) </br>
+[[AttnUNet3D]](https://github.com/mobarakol/3D_Attention_UNet) </br>
+[[nnFormer]](https://github.com/282857341/nnFormer) </br>
+[[UNETR]](https://github.com/282857341/nnFormer) </br>
+[[CoTr]](https://github.com/YtongXie/CoTr) </br>
+[[nnUNet]](https://github.com/MIC-DKFZ/nnUNet) </br>
+[[UNet-RF]](https://github.com/WuChanada/Acute-ischemic-lesion-segmentation-in-NCCT)
+
 
 ## Acknowledgements
 Part of codes are reused from the nnU-Net. Thanks to Fabian Isensee for the codes of nnU-Net.
