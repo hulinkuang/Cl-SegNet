@@ -45,7 +45,8 @@ The pre-trained model of AISD dataset can be downloaded from [[Baidu YUN]](https
 For the methods (i.e. LambdaUNet [1], UNet-AM [2], UNet-GC [3]) that do not publish their codes, we reproduce these methods by ourselves, which can be found at [[DOC]](./ClSeg_package/ClSeg/network_architecture)
 
 ### 2.3 Open-source codes
-The open-source codes can are as follows:
+The open-source codes can are as follows: <br />
+
 [[AttnUnet2D]](https://github.com/sfczekalski/attention_unet) </br>
 [[Swin-Unet]](https://github.com/HuCaoFighting/Swin-Unet) </br>
 [[TransUNet]](https://github.com/Beckschen/TransUNet) </br>
