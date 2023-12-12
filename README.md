@@ -43,9 +43,9 @@ The pre-trained model of AISD dataset can be downloaded from [[Baidu YUN]](https
 
 ### 2.2 Reproduction details and codes 
 During reproduction, for the methods (e.g. LambdaUNet [1], UNet-AM [2], UNet-GC [3]) that do not publish their codes, we endeavored to implement their approaches by following
-the technical details provided in their papers. our reproduced codes of these methods can be found at [[DOC]](./ClSeg_package/ClSeg/network_architecture)
+the technical details provided in their papers. our reproduced codes of these methods can be found at [[DOC]](./ClSeg_package/ClSeg/network_architecture) and [[DOC]](./ClSeg_package/ClSeg/network_architecture/models)
 
-For the compared methods with Open-source codes, we directly use their codes for AIS lesion segmentation. The links of their open-source codes can are listed as follows: <br />
+For the compared methods with Open-source codes, we directly use their codes for AIS lesion segmentation on 2 AIS datasets. The links of their open-source codes can are listed as follows: <br />
 
 [[AttnUnet2D]](https://github.com/sfczekalski/attention_unet) </br>
 [[Swin-Unet]](https://github.com/HuCaoFighting/Swin-Unet) </br>
@@ -58,7 +58,7 @@ For the compared methods with Open-source codes, we directly use their codes for
 [[nnUNet]](https://github.com/MIC-DKFZ/nnUNet) </br>
 [[UNet-RF]](https://github.com/WuChanada/Acute-ischemic-lesion-segmentation-in-NCCT)
 
-Note that for all compared methods, to perform fair comparisons, we use the same pre-processing steps and the same data split.
+Note that for all compared methods, to perform fair comparisons, we use the same pre-processing steps (as 1.2 Pre-prcoessing) and the same data split. and in the paper all compared results were derived from our reproduction experiments.
 
 
 ## Acknowledgements
